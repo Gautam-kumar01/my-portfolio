@@ -15,7 +15,7 @@
 
 > *"I don't just learn technology. I build products with it."*
 
-[🌐 Live Portfolio](https://resumecraft.co.in) • [✉️ Email](mailto:gautamkr192007@gmail.com) • [💼 LinkedIn](https://www.linkedin.com/in/gautam-kumar-8408a2307/) • [🐙 GitHub](https://github.com/Gautam-kumar01)
+[🌐 Portfolio Repository](https://github.com/Gautam-kumar01/my-portfolio) • [✉️ Email](mailto:gautamkr192007@gmail.com) • [💼 LinkedIn](https://www.linkedin.com/in/imgautam01) • [🐙 GitHub](https://github.com/Gautam-kumar01)
 
 </div>
 
@@ -148,7 +148,7 @@ pnpm preview
 
 - **Developer**: Gautam Kumar
 - **Email**: [gautamkr192007@gmail.com](mailto:gautamkr192007@gmail.com)
-- **LinkedIn**: [linkedin.com/in/gautam-kumar-8408a2307](https://www.linkedin.com/in/gautam-kumar-8408a2307/)
+- **LinkedIn Profile**: [linkedin.com/in/imgautam01](https://www.linkedin.com/in/imgautam01) (or [Posts](https://www.linkedin.com/posts/imgautam01))
 - **GitHub**: [github.com/Gautam-kumar01](https://github.com/Gautam-kumar01)
 
 ---
