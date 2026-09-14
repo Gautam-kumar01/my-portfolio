@@ -1,0 +1,5 @@
+# robots.txt for Gautam Kumar Portfolio
+User-agent: *
+Allow: /
+
+Sitemap: https://resumecraft.co.in/sitemap.xml

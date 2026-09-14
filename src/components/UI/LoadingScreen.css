@@ -1,0 +1,110 @@
+.loading-screen-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #080808;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+  pointer-events: auto;
+}
+
+.loading-fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-content-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 280px;
+  gap: 20px;
+}
+
+.loading-monogram-wrap {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-monogram-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  border: 1.5px solid rgba(0, 255, 102, 0.3);
+  box-shadow: 0 0 24px var(--accent-green-glow);
+  animation: pulse-ring 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    transform: scale(0.96);
+    border-color: rgba(0, 255, 102, 0.3);
+  }
+  50% {
+    transform: scale(1.04);
+    border-color: var(--accent-green);
+    box-shadow: 0 0 32px var(--accent-green-glow);
+  }
+}
+
+.loading-monogram-text {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.loading-telemetry-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+}
+
+.telemetry-label {
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+}
+
+.telemetry-pct {
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+.loading-progress-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-green), #60a5fa);
+  box-shadow: 0 0 10px var(--accent-green);
+  transition: width 0.08s ease-out;
+  border-radius: var(--radius-full);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen-backdrop {
+    display: none !important;
+  }
+}

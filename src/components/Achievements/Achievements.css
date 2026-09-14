@@ -1,0 +1,284 @@
+.achievements-section {
+  background: #080808;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(70px, 10vh, 120px) 0;
+}
+
+.achievements-ambient-glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 255, 102, 0.04) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.achievements-header {
+  margin-bottom: clamp(36px, 5vh, 52px);
+}
+
+.achievements-emblems-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  margin-bottom: 32px;
+}
+
+/* 3D Metallic Emblem Card */
+.achievement-emblem-card {
+  background: rgba(14, 16, 14, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 3.5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transform-style: preserve-3d;
+}
+
+.achievement-emblem-card:hover {
+  background: rgba(18, 22, 18, 0.95);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65);
+}
+
+.emblem-card-rank {
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.emblem-card-rank:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), 0 0 32px rgba(251, 191, 36, 0.2);
+}
+
+.emblem-card-participant {
+  border-color: rgba(96, 165, 250, 0.25);
+}
+
+.emblem-card-participant:hover {
+  border-color: #60a5fa;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), 0 0 32px rgba(96, 165, 250, 0.2);
+}
+
+/* Emblem Header */
+.emblem-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.emblem-3d-visual {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emblem-ring-outer {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: slowSpin 20s linear infinite;
+}
+
+@keyframes slowSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.emblem-ring-inner {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emblem-card-rank .emblem-ring-outer {
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.emblem-card-rank .emblem-ring-inner {
+  border-color: rgba(251, 191, 36, 0.6);
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, rgba(0, 0, 0, 0.6) 80%);
+}
+
+.emblem-card-participant .emblem-ring-outer {
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.emblem-card-participant .emblem-ring-inner {
+  border-color: rgba(96, 165, 250, 0.6);
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, rgba(0, 0, 0, 0.6) 80%);
+}
+
+.emblem-trophy-icon {
+  color: #fbbf24;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+}
+
+.emblem-sparkles-icon {
+  color: #60a5fa;
+  filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+}
+
+.emblem-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.emblem-badge-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+}
+
+.emblem-card-rank .emblem-badge-chip {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.15);
+}
+
+.emblem-card-participant .emblem-badge-chip {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.15);
+}
+
+.emblem-year-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Content */
+.emblem-content-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.emblem-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+
+.emblem-subtitle {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+}
+
+.emblem-focus-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.focus-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent-green);
+}
+
+.focus-desc {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #d1d5db;
+}
+
+.emblem-footer-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.constraint-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.verified-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  color: #a7f3d0;
+  line-height: 1.4;
+}
+
+/* Ethos Strip */
+.achievements-ethos-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 24px;
+  background: rgba(14, 18, 14, 0.6);
+  border: 1px solid rgba(0, 255, 102, 0.15);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .achievements-emblems-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

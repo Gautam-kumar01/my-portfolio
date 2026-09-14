@@ -1,0 +1,170 @@
+.education-section {
+  background: #090909;
+}
+
+.education-header {
+  margin-bottom: clamp(36px, 6vh, 60px);
+}
+
+.education-timeline-track {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  position: relative;
+  margin-left: 20px;
+}
+
+.timeline-milestone-item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 24px;
+  position: relative;
+}
+
+/* Marker Column */
+.milestone-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.marker-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #181818;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 2;
+  margin-top: 6px;
+  transition: all var(--transition-normal);
+}
+
+.milestone-current .marker-dot {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  box-shadow: 0 0 16px var(--accent-green-glow);
+}
+
+.marker-active-pulse {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-green);
+  animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.marker-line {
+  flex: 1;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-top: 8px;
+  margin-bottom: 8px;
+  min-height: 80px;
+}
+
+/* Content Card */
+.milestone-content-card {
+  background: rgba(16, 16, 16, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-md);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  transition: all var(--transition-fast);
+}
+
+.milestone-content-card:hover {
+  background: rgba(20, 20, 20, 0.9);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.milestone-current .milestone-content-card {
+  border-color: rgba(0, 255, 102, 0.25);
+  background: rgba(14, 20, 15, 0.7);
+}
+
+.milestone-year-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.milestone-year-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-green);
+  background: rgba(0, 255, 102, 0.08);
+  border: 1px solid var(--accent-green-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.current-program-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--accent-green);
+  background: rgba(0, 255, 102, 0.12);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.milestone-degree {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.milestone-institution-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.institution-name {
+  font-weight: 600;
+  color: #d4d4d4;
+}
+
+.institution-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.milestone-desc {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .education-timeline-track {
+    margin-left: 0;
+  }
+  .timeline-milestone-item {
+    grid-template-columns: 32px 1fr;
+    gap: 16px;
+  }
+}
