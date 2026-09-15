@@ -18,8 +18,10 @@ import {
   Radar,
   Activity,
   GitBranch,
+  Zap,
 } from 'lucide-react';
 import { GithubIcon } from '../UI/SocialIcons';
+import confetti from 'canvas-confetti';
 
 interface ProjectCardProps {
   project: ProjectItem;
@@ -34,6 +36,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 }) => {
   const cardRef = useRef<HTMLElement>(null);
   const [tiltStyle, setTiltStyle] = useState<React.CSSProperties>({});
+  const [atsScore, setAtsScore] = useState(94);
+  const [isOptimized, setIsOptimized] = useState(false);
 
   // 3D Tilt on mouse move
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
@@ -60,6 +64,24 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     });
   };
 
+  const handleTriggerAtsBoost = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isOptimized) {
+      setAtsScore(98);
+      setIsOptimized(true);
+      try {
+        confetti({
+          particleCount: 40,
+          spread: 60,
+          origin: { y: 0.7 },
+          colors: ['#00ff66', '#10b981', '#3b82f6'],
+        });
+      } catch (err) {
+        // silent fallback
+      }
+    }
+  };
+
   // --- Visual Preview 1: ResumeCraft Interactive Document ---
   const renderResumeCraftVisual = () => {
     return (
@@ -74,10 +96,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             <FileText size={12} className="tab-icon" />
             <span>ResumeCraft — AI Resume Optimizer</span>
           </div>
-          <div className="resumecraft-score-pill">
-            <Sparkles size={11} />
-            <span>ATS Score: 94/100</span>
-          </div>
+
+          <a
+            href="https://resumecraft.co.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="header-live-link font-mono"
+            title="Open ResumeCraft live site"
+          >
+            <span className="status-dot" />
+            <span>resumecraft.co.in</span>
+            <ExternalLink size={11} />
+          </a>
         </div>
 
         <div className="resumecraft-body">
@@ -91,10 +122,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             <div className="paper-section">
               <div className="paper-section-title">CORE COMPETENCIES</div>
               <div className="paper-tags">
-                <span>React</span>
+                <span>React 19</span>
                 <span>Node.js</span>
-                <span>AI Prompt Pipelines</span>
                 <span>PostgreSQL</span>
+                <span>AI Prompt Pipelines</span>
               </div>
             </div>
             <div className="paper-section">
@@ -102,9 +133,23 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               <div className="paper-project-item">
                 <span className="item-title">ResumeCraft & CloudLab</span>
                 <span className="item-desc">
-                  AI resume scoring engines & real-time cloud sandbox environments.
+                  AI ATS resume optimization engine & browser-based cloud terminal sandbox.
                 </span>
               </div>
+            </div>
+
+            <div className="paper-live-footer">
+              <span className="ats-score-live font-mono">
+                ATS Score: <strong className="text-accent">{atsScore}/100</strong>
+              </span>
+              <button
+                type="button"
+                onClick={handleTriggerAtsBoost}
+                className="btn-ats-boost font-mono"
+              >
+                <Sparkles size={11} />
+                <span>{isOptimized ? '✓ Optimized to 98%' : 'Simulate ATS AI Boost'}</span>
+              </button>
             </div>
           </div>
 
@@ -116,19 +161,28 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
             <div className="feedback-item feedback-success">
               <CheckCircle2 size={13} />
-              <span>High keyword match for Full-Stack roles</span>
+              <span>98% Keyword Match for Full-Stack Roles</span>
             </div>
             <div className="feedback-item feedback-success">
               <CheckCircle2 size={13} />
-              <span>Quantifiable achievements detected</span>
+              <span>Quantifiable production impact verified</span>
             </div>
             <div className="feedback-item feedback-suggestion">
               <Cpu size={13} />
-              <span>Tailored suggestion: Highlight Docker & DB</span>
+              <span>Tailored: Highlighting Docker & PostgreSQL</span>
             </div>
-            <div className="feedback-action-tag">
-              <span className="status-dot" />
-              <span>Live AI Scoring Engine Active</span>
+
+            <div className="feedback-direct-action">
+              <a
+                href="https://resumecraft.co.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="btn-launch-live-app font-mono"
+              >
+                <Zap size={12} className="text-accent" />
+                <span>Launch Live App ↗</span>
+              </a>
             </div>
           </div>
         </div>
@@ -141,15 +195,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     'cloudlab@sandbox:~$ init workspace --node-runtime=v22',
     '[OK] Container sandbox initialized in 38ms',
     '[OK] WebSocket stream connected at wss://cloudlab.dev/session',
-    'cloudlab@sandbox:~$ ready for execution',
+    'cloudlab@sandbox:~$ ready for execution. Click quick commands below:',
   ]);
   const [termInput, setTermInput] = useState('');
 
-  const handleTerminalSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!termInput.trim()) return;
-
-    const cmd = termInput.trim();
+  const executeCommand = (rawCmd: string) => {
+    const cmd = rawCmd.trim().toLowerCase();
     let reply = `[EXEC] '${cmd}' executed successfully.`;
 
     if (cmd.includes('help')) {
@@ -159,15 +210,23 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       setTermInput('');
       return;
     } else if (cmd.includes('status')) {
-      reply = 'System Status: All services operational. Latency: 14ms. Memory: 142MB / 1GB';
+      reply = 'System Status: All services operational. Latency: 14ms. Memory: 142MB / 1GB. Node: v22.4';
     } else if (cmd.includes('build')) {
-      reply = '[BUILD] Bundle optimized: 0 errors, 5 assets compiled (184kb total)';
+      reply = '[BUILD] Bundle optimized: 0 errors, 5 assets compiled (184kb total) in 1.4s';
     } else if (cmd.includes('test')) {
-      reply = '[TEST] 18 passed, 0 failed. All suites green in 120ms.';
+      reply = '[TEST] 18 passed, 0 failed. All test suites green in 120ms.';
+    } else if (cmd.includes('run')) {
+      reply = '[RUN] Server listening on http://localhost:8080 (Process ID: 4192)';
     }
 
-    setTerminalOutput((prev) => [...prev, `cloudlab@sandbox:~$ ${cmd}`, reply]);
+    setTerminalOutput((prev) => [...prev, `cloudlab@sandbox:~$ ${rawCmd}`, reply]);
     setTermInput('');
+  };
+
+  const handleTerminalSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!termInput.trim()) return;
+    executeCommand(termInput);
   };
 
   const renderCloudLabVisual = () => {
@@ -181,11 +240,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
           <div className="cloudlab-tab">
             <Terminal size={12} />
-            <span>cloudlab-terminal — bash</span>
+            <span>cloudlab-terminal — bash sandbox</span>
           </div>
           <div className="cloudlab-status">
             <span className="status-dot" />
-            <span>SANDBOX ONLINE</span>
+            <span>LIVE SANDBOX ACTIVE</span>
           </div>
         </div>
 
@@ -198,13 +257,31 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             ))}
           </div>
 
-          <form onSubmit={handleTerminalSubmit} className="terminal-prompt-form">
+          {/* Clickable Quick Command Chips */}
+          <div className="terminal-quick-chips">
+            <span className="chips-label font-mono">Quick Run:</span>
+            {['status', 'build', 'test', 'run', 'clear'].map((cmd) => (
+              <button
+                key={cmd}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  executeCommand(cmd);
+                }}
+                className="chip-btn font-mono"
+              >
+                {cmd}
+              </button>
+            ))}
+          </div>
+
+          <form onSubmit={handleTerminalSubmit} className="terminal-prompt-form" onClick={(e) => e.stopPropagation()}>
             <span className="prompt-label">cloudlab@sandbox:~$</span>
             <input
               type="text"
               value={termInput}
               onChange={(e) => setTermInput(e.target.value)}
-              placeholder="type 'status', 'build', 'test', or 'help' and press Enter..."
+              placeholder="type a command or click a quick run chip..."
               className="terminal-input"
             />
             <button type="submit" className="terminal-run-btn" aria-label="Run command">
@@ -297,7 +374,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               </div>
             </div>
 
-            <div className="gis-coordinates-hud">
+            <div className="gis-coordinates-hud font-mono">
               <span>LAT: 28.6139° N</span>
               <span>LON: 77.2090° E</span>
               <span>ELEV: {selectedParcel.elevation}</span>
@@ -359,24 +436,24 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
             <div className="skill-meter-row">
               <div className="meter-label">
-                <span>Frontend & UI (React/TypeScript)</span>
+                <span>Frontend & UI (React 19 / TypeScript)</span>
                 <span className="font-mono">92%</span>
               </div>
               <div className="meter-bar"><div className="meter-fill" style={{ width: '92%' }} /></div>
             </div>
             <div className="skill-meter-row">
               <div className="meter-label">
-                <span>Backend & APIs (Node/Express)</span>
+                <span>Backend & APIs (Node / Python)</span>
                 <span className="font-mono">86%</span>
               </div>
               <div className="meter-bar"><div className="meter-fill" style={{ width: '86%' }} /></div>
             </div>
             <div className="skill-meter-row">
               <div className="meter-label">
-                <span>Cloud & DevOps (Docker/Hosting)</span>
-                <span className="font-mono">78%</span>
+                <span>Database & Systems (PostgreSQL / Docker)</span>
+                <span className="font-mono">80%</span>
               </div>
-              <div className="meter-bar"><div className="meter-fill" style={{ width: '78%' }} /></div>
+              <div className="meter-bar"><div className="meter-fill" style={{ width: '80%' }} /></div>
             </div>
           </div>
 
@@ -387,11 +464,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
             <div className="rec-card">
               <div className="rec-badge">High Impact</div>
-              <p>Add PostgreSQL indexing and connection pooling benchmarks to elevate full-stack authority.</p>
+              <p>PostgreSQL indexing & connection pooling benchmarks to elevate full-stack authority.</p>
             </div>
             <div className="rec-card">
               <div className="rec-badge">Next Step</div>
-              <p>Integrate LLM structured output parsing for autonomous workflows.</p>
+              <p>Autonomous LLM structured output parsing workflows.</p>
             </div>
           </div>
         </div>
@@ -468,6 +545,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     );
   };
 
+  const hasLiveUrl = Boolean(project.liveUrl);
+
   return (
     <article
       ref={cardRef}
@@ -476,7 +555,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       style={tiltStyle}
       className={`project-cinematic-card ${
         isHighlighted ? 'project-card-highlighted' : ''
-      }`}
+      } ${hasLiveUrl ? 'project-has-live-url' : ''}`}
       data-cursor-label="VIEW"
     >
       {/* Visual Product Showcase (60-65% Dominance) */}
@@ -490,7 +569,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         <div className="visual-hover-overlay">
           <span className="hover-badge">
             <ArrowUpRight size={16} />
-            <span>Inspect Project Architecture</span>
+            <span>Inspect Architecture & Details</span>
           </span>
         </div>
       </div>
@@ -502,9 +581,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           <span className="project-category">{project.category}</span>
         </div>
 
+        {/* Live Status Badge */}
         <div className="project-status-row">
           <span className="status-dot" />
           <span className="project-status-text">{project.status}</span>
+          {hasLiveUrl && (
+            <span className="live-pill-tag font-mono">
+              <Zap size={11} />
+              <span>LIVE WORKING APP</span>
+            </span>
+          )}
         </div>
 
         <h3 className="project-title">{project.title}</h3>
@@ -520,20 +606,23 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           ))}
         </div>
 
-        {/* Action CTAs */}
+        {/* Action CTAs: Distinct, Glowing, Working Live Buttons */}
         <div className="project-card-actions">
-          {/* Live Visit Project button if available (ResumeCraft, CloudLab, etc.) */}
-          {project.liveUrl ? (
+          {/* Primary Action Button */}
+          {hasLiveUrl ? (
             <a
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-accent project-view-btn"
-              aria-label={`Visit live website for ${project.title}`}
+              className="btn-accent btn-live-working-primary"
+              aria-label={`Launch live working app for ${project.title}`}
               onClick={(e) => e.stopPropagation()}
             >
-              <span>Visit Project</span>
-              <ArrowUpRight size={15} />
+              <div className="live-btn-inner">
+                <span className="live-btn-beacon" />
+                <span className="live-btn-text">Visit Live Product</span>
+                <ArrowUpRight size={16} className="live-btn-icon" />
+              </div>
             </a>
           ) : (
             <button
@@ -541,7 +630,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               className="btn-accent project-view-btn"
               aria-label={`View ${project.title} Case Study`}
             >
-              <span>Case Study</span>
+              <Sparkles size={15} />
+              <span>View Case Study</span>
               <ArrowUpRight size={15} />
             </button>
           )}
@@ -552,7 +642,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             className="btn-secondary project-detail-btn"
             aria-label={`Inspect ${project.title} Details`}
           >
-            <span>Details</span>
+            <span>Architecture</span>
           </button>
 
           {/* GitHub source button */}
