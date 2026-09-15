@@ -53,7 +53,7 @@ Welcome to the official repository for **Gautam Kumar's Portfolio ("The Digital 
 - **Core & Runtime**: React 19, TypeScript, Vite 8
 - **3D Graphics & WebGL**: Three.js, Canvas 2D Dynamic Textures
 - **Styling & Layout**: Vanilla CSS with strict HSL Design Tokens, Glassmorphism, and Spring Curves (`cubic-bezier(0.16, 1, 0.3, 1)`)
-- **Typography**: Syne (Headings), Geist / Inter (Body), JetBrains Mono (Telemetry & Code)
+- **Typography**: Outfit (Headings/Display), Space Grotesk (Body & Subheadings), JetBrains Mono (Telemetry & Code)
 - **Icons & Effects**: Lucide React, Canvas Confetti
 - **Performance**: Rollup manual chunking splitting Three.js, React vendor, and UI components into independent cacheable assets.
 

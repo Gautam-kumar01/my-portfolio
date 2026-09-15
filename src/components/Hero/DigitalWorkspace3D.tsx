@@ -8,13 +8,15 @@ export const DigitalWorkspace3D: React.FC = () => {
     const container = mountRef.current;
     if (!container) return;
 
-    let width = container.clientWidth || 600;
-    let height = container.clientHeight || 550;
+    let width = container.clientWidth || 640;
+    let height = container.clientHeight || 580;
 
     // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1000);
-    camera.position.set(0, 0, 20);
+    scene.fog = new THREE.FogExp2(0x05070a, 0.035);
+
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+    camera.position.set(0, 0, 18.5);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -24,231 +26,308 @@ export const DigitalWorkspace3D: React.FC = () => {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
     container.appendChild(renderer.domElement);
 
-    // Master Group for the entire digital command center
+    // Master Group for entire 3D workspace
     const masterGroup = new THREE.Group();
     scene.add(masterGroup);
 
-    // --- 1. CORE WORKSPACE MONITOR (The Developer Console) ---
+    // --- 1. PERSPECTIVE CYBER GRID (Holographic Floor Plane) ---
+    const gridGeo = new THREE.PlaneGeometry(36, 36, 24, 24);
+    const gridMat = new THREE.MeshBasicMaterial({
+      color: 0x00ff9d,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.07,
+    });
+    const cyberGrid = new THREE.Mesh(gridGeo, gridMat);
+    cyberGrid.rotation.x = -Math.PI / 2.2;
+    cyberGrid.position.set(0, -6.5, -2);
+    masterGroup.add(cyberGrid);
+
+    // --- 2. HOLOGRAPHIC 3D MAIN WORKSPACE CONSOLE ---
     const monitorGroup = new THREE.Group();
     masterGroup.add(monitorGroup);
 
-    // Bezel Frame
-    const bezelGeo = new THREE.BoxGeometry(7.2, 4.6, 0.28);
+    // Bezel Frame with Obsidian Glass Material
+    const bezelGeo = new THREE.BoxGeometry(7.4, 4.8, 0.25);
     const bezelMat = new THREE.MeshStandardMaterial({
-      color: 0x121412,
-      roughness: 0.35,
-      metalness: 0.85,
+      color: 0x0a0d12,
+      roughness: 0.2,
+      metalness: 0.9,
     });
     const bezel = new THREE.Mesh(bezelGeo, bezelMat);
     monitorGroup.add(bezel);
 
-    // Screen Texture via Dynamic Canvas
-    const screenGeo = new THREE.PlaneGeometry(6.7, 4.1);
+    // Glowing Holographic Screen Texture
+    const screenGeo = new THREE.PlaneGeometry(6.9, 4.3);
     const screenCanvas = document.createElement('canvas');
     screenCanvas.width = 1024;
-    screenCanvas.height = 620;
+    screenCanvas.height = 640;
     const ctx = screenCanvas.getContext('2d');
     if (ctx) {
-      // Dark IDE Canvas Background
-      ctx.fillStyle = '#080a08';
-      ctx.fillRect(0, 0, 1024, 620);
+      // Obsidian Slate Screen Background
+      const bgGrad = ctx.createLinearGradient(0, 0, 1024, 640);
+      bgGrad.addColorStop(0, '#070a0e');
+      bgGrad.addColorStop(1, '#0a0e14');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 1024, 640);
+
+      // Cyber Grid Background on Screen
+      ctx.strokeStyle = 'rgba(0, 255, 157, 0.04)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x <= 1024; x += 32) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, 640);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= 640; y += 32) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(1024, y);
+        ctx.stroke();
+      }
 
       // Top IDE Window Bar
-      ctx.fillStyle = '#141814';
-      ctx.fillRect(0, 0, 1024, 52);
-
-      // Window Control Dots
-      ctx.fillStyle = '#ff5f56';
+      ctx.fillStyle = '#0f141c';
+      ctx.fillRect(0, 0, 1024, 56);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
       ctx.beginPath();
-      ctx.arc(32, 26, 8, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.moveTo(0, 56);
+      ctx.lineTo(1024, 56);
+      ctx.stroke();
 
-      ctx.fillStyle = '#ffbd2e';
-      ctx.beginPath();
-      ctx.arc(58, 26, 8, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#27c93f';
-      ctx.beginPath();
-      ctx.arc(84, 26, 8, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Title Bar
-      ctx.fillStyle = '#8a8a8a';
-      ctx.font = '600 20px "JetBrains Mono", monospace';
-      ctx.fillText('gautam-kumar@digital-workshop:~/workspace/main.ts', 120, 33);
-
-      // Line Numbers & Code Lines
-      const codeLines = [
-        { num: '01', text: '// Gautam Kumar — Full-Stack Developer & Builder', color: '#525252' },
-        { num: '02', text: 'import { AI, Cloud, Geospatial3D } from "@digital/workshop";', color: '#a855f7' },
-        { num: '03', text: '', color: '' },
-        { num: '04', text: 'export async function buildDigitalProduct() {', color: '#00ff66' },
-        { num: '05', text: '  const stack = await createSystem({', color: '#f5f5f5' },
-        { num: '06', text: '    products: ["ResumeCraft", "CloudLab", "3D ULPIN GIS"],', color: '#3b82f6' },
-        { num: '07', text: '    principles: ["Performance", "Real Utility", "Clean Code"],', color: '#10b981' },
-        { num: '08', text: '    status: "Active & Shipping To Production"', color: '#f59e0b' },
-        { num: '09', text: '  });', color: '#f5f5f5' },
-        { num: '10', text: '  return stack.deployToInternet();', color: '#00ff66' },
-        { num: '11', text: '}', color: '#f5f5f5' },
+      // Window Control Dots with Cyber Glow
+      const dots = [
+        { color: '#ef4444', x: 32 },
+        { color: '#f59e0b', x: 58 },
+        { color: '#10b981', x: 84 },
       ];
-
-      let yOffset = 100;
-      codeLines.forEach((line) => {
-        if (line.num) {
-          ctx.fillStyle = '#3a423a';
-          ctx.font = '500 22px "JetBrains Mono", monospace';
-          ctx.fillText(line.num, 28, yOffset);
-
-          ctx.fillStyle = line.color || '#f5f5f5';
-          ctx.fillText(line.text, 80, yOffset);
-        }
-        yOffset += 44;
+      dots.forEach((d) => {
+        ctx.fillStyle = d.color;
+        ctx.beginPath();
+        ctx.arc(d.x, 28, 7, 0, Math.PI * 2);
+        ctx.fill();
       });
 
-      // Status Pill at Bottom of Screen
-      ctx.fillStyle = 'rgba(0, 255, 102, 0.12)';
-      ctx.fillRect(40, 560, 944, 40);
-      ctx.fillStyle = '#00ff66';
+      // Tab Title
+      ctx.fillStyle = '#00ff9d';
       ctx.font = '600 18px "JetBrains Mono", monospace';
-      ctx.fillText('● ENGINE: 60FPS WebGL • Full-Stack Cloud Environment Active', 60, 586);
+      ctx.fillText('⚡ gautam@digital-workshop:~/portfolio/core.ts', 124, 35);
+
+      // Active Branch Pill
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.15)';
+      ctx.beginPath();
+      ctx.roundRect(820, 14, 170, 28, 14);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      ctx.stroke();
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = '600 14px "JetBrains Mono", monospace';
+      ctx.fillText('⑂ main [live]', 845, 33);
+
+      // Syntax Highlighted Code Lines
+      const codeLines = [
+        { num: '01', text: '// Gautam Kumar — Full-Stack Developer & Product Builder', color: '#64748b' },
+        { num: '02', text: 'import { AIATS, CloudKernel, Geospatial3D } from "@gautam/products";', color: '#a855f7' },
+        { num: '03', text: '', color: '' },
+        { num: '04', text: 'export async function initializeProduction() {', color: '#00ff9d' },
+        { num: '05', text: '  const systems = await deployEcosystem({', color: '#f8fafc' },
+        { num: '06', text: '    liveApp: "ResumeCraft (AI ATS Engine) • 100% Live",', color: '#38bdf8' },
+        { num: '07', text: '    cloudLab: "Docker Web Sandbox + Isolated Execution",', color: '#00ff9d' },
+        { num: '08', text: '    hackathons: "SIH Internal (3rd Rank) • Google Gen AI",', color: '#fbbf24' },
+        { num: '09', text: '    craft: ["React", "TypeScript", "Node.js", "Three.js", "Python"]', color: '#f8fafc' },
+        { num: '10', text: '  });', color: '#f8fafc' },
+        { num: '11', text: '  return systems.launchToUniverse(); // Ready for real-world impact', color: '#10b981' },
+        { num: '12', text: '}', color: '#00ff9d' },
+      ];
+
+      let yOffset = 104;
+      codeLines.forEach((line) => {
+        if (line.num) {
+          ctx.fillStyle = '#475569';
+          ctx.font = '500 20px "JetBrains Mono", monospace';
+          ctx.fillText(line.num, 28, yOffset);
+
+          ctx.fillStyle = line.color || '#f8fafc';
+          ctx.font = '500 20px "JetBrains Mono", monospace';
+          ctx.fillText(line.text, 78, yOffset);
+        }
+        yOffset += 40;
+      });
+
+      // Realtime Status Bar at Bottom
+      ctx.fillStyle = 'rgba(0, 255, 157, 0.08)';
+      ctx.beginPath();
+      ctx.roundRect(30, 574, 964, 44, 8);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0, 255, 157, 0.25)';
+      ctx.stroke();
+
+      ctx.fillStyle = '#00ff9d';
+      ctx.font = '700 16px "JetBrains Mono", monospace';
+      ctx.fillText('● SYSTEM STATUS: OPTIMAL (60 FPS) • READY TO BUILD & COLLABORATE', 54, 602);
     }
 
     const screenTexture = new THREE.CanvasTexture(screenCanvas);
     const screenMat = new THREE.MeshBasicMaterial({
       map: screenTexture,
       transparent: true,
-      opacity: 0.96,
+      opacity: 0.98,
     });
     const screenMesh = new THREE.Mesh(screenGeo, screenMat);
-    screenMesh.position.z = 0.15;
+    screenMesh.position.z = 0.13;
     monitorGroup.add(screenMesh);
 
-    // Glowing Bezel Edges
+    // Glowing Cyan/Green Neon Bezel Edges
     const wireframeGeo = new THREE.EdgesGeometry(bezelGeo);
     const wireframeMat = new THREE.LineBasicMaterial({
-      color: 0x00ff66,
+      color: 0x00ff9d,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.5,
     });
     const monitorEdges = new THREE.LineSegments(wireframeGeo, wireframeMat);
     monitorGroup.add(monitorEdges);
 
-    // --- 2. FLOATING ELEMENTS REPRESENTING CORE PILLARS ---
+    // --- 3. FLOATING HOLOGRAPHIC SATELLITES (3D Tech Elements) ---
 
-    // A. [AI] Glowing Neural Node (Icosahedron with Orbiting Ring)
+    // A. [AI Engine Node] Glowing Icosahedron + Dual Holographic Rings
     const aiGroup = new THREE.Group();
-    const icosaGeo = new THREE.IcosahedronGeometry(1.25, 0);
+    const icosaGeo = new THREE.IcosahedronGeometry(1.3, 0);
     const icosaMat = new THREE.MeshStandardMaterial({
-      color: 0x00ff66,
+      color: 0x00ff9d,
       wireframe: true,
-      emissive: 0x00ff66,
-      emissiveIntensity: 0.4,
+      emissive: 0x00ff9d,
+      emissiveIntensity: 0.5,
       metalness: 0.9,
       roughness: 0.1,
     });
     const aiMesh = new THREE.Mesh(icosaGeo, icosaMat);
     aiGroup.add(aiMesh);
 
-    // AI Orbital Energy Ring
-    const aiRingGeo = new THREE.TorusGeometry(1.7, 0.04, 16, 64);
-    const aiRingMat = new THREE.MeshBasicMaterial({
-      color: 0x00ff66,
-      transparent: true,
-      opacity: 0.6,
+    // Inner glowing sphere
+    const aiCoreGeo = new THREE.SphereGeometry(0.45, 16, 16);
+    const aiCoreMat = new THREE.MeshBasicMaterial({
+      color: 0x00ff9d,
     });
-    const aiRing = new THREE.Mesh(aiRingGeo, aiRingMat);
-    aiRing.rotation.x = Math.PI / 3;
-    aiGroup.add(aiRing);
+    const aiCore = new THREE.Mesh(aiCoreGeo, aiCoreMat);
+    aiGroup.add(aiCore);
 
-    aiGroup.position.set(-5.2, 3.0, 2.5);
+    // Dual Rings
+    const ringGeo1 = new THREE.TorusGeometry(1.9, 0.04, 16, 64);
+    const ringMat1 = new THREE.MeshBasicMaterial({
+      color: 0x00ff9d,
+      transparent: true,
+      opacity: 0.7,
+    });
+    const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
+    ring1.rotation.x = Math.PI / 3;
+    aiGroup.add(ring1);
+
+    const ringGeo2 = new THREE.TorusGeometry(2.2, 0.03, 16, 64);
+    const ringMat2 = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.5,
+    });
+    const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+    ring2.rotation.y = Math.PI / 4;
+    aiGroup.add(ring2);
+
+    aiGroup.position.set(-5.6, 3.2, 2.5);
     masterGroup.add(aiGroup);
 
-    // B. [CLOUD] Container & Sandbox Platform (Torus Node)
+    // B. [Cloud & Sandbox Engine] Holographic Torus Knot
     const cloudGroup = new THREE.Group();
-    const torusGeo = new THREE.TorusGeometry(1.3, 0.28, 16, 40);
-    const torusMat = new THREE.MeshStandardMaterial({
-      color: 0x3b82f6,
+    const knotGeo = new THREE.TorusKnotGeometry(1.1, 0.28, 64, 16);
+    const knotMat = new THREE.MeshStandardMaterial({
+      color: 0x38bdf8,
       wireframe: true,
-      emissive: 0x3b82f6,
-      emissiveIntensity: 0.4,
-      metalness: 0.8,
+      emissive: 0x38bdf8,
+      emissiveIntensity: 0.45,
+      metalness: 0.85,
+      roughness: 0.2,
     });
-    const cloudMesh = new THREE.Mesh(torusGeo, torusMat);
-    cloudGroup.add(cloudMesh);
+    const knotMesh = new THREE.Mesh(knotGeo, knotMat);
+    cloudGroup.add(knotMesh);
 
-    // Cloud Inner Core
-    const cloudCoreGeo = new THREE.SphereGeometry(0.5, 16, 16);
-    const cloudCoreMat = new THREE.MeshBasicMaterial({
-      color: 0x60a5fa,
-      wireframe: true,
-    });
-    const cloudCore = new THREE.Mesh(cloudCoreGeo, cloudCoreMat);
-    cloudGroup.add(cloudCore);
-
-    cloudGroup.position.set(5.4, 2.6, 2.0);
+    cloudGroup.position.set(5.8, 2.8, 2.2);
     masterGroup.add(cloudGroup);
 
-    // C. [PROJECTS & 3D GIS] Spatial Cadastral Octahedron Crystal
+    // C. [3D GIS & Geospatial Diamond] Octahedron Crystal with Amber Accents
     const gisGroup = new THREE.Group();
-    const octaGeo = new THREE.OctahedronGeometry(1.2);
+    const octaGeo = new THREE.OctahedronGeometry(1.25, 0);
     const octaMat = new THREE.MeshStandardMaterial({
       color: 0x10b981,
       wireframe: true,
       emissive: 0x10b981,
-      emissiveIntensity: 0.35,
-      metalness: 0.85,
+      emissiveIntensity: 0.4,
+      metalness: 0.9,
     });
     const gisMesh = new THREE.Mesh(octaGeo, octaMat);
     gisGroup.add(gisMesh);
 
-    gisGroup.position.set(4.8, -3.2, 3.2);
+    const gisRingGeo = new THREE.TorusGeometry(1.7, 0.03, 16, 48);
+    const gisRingMat = new THREE.MeshBasicMaterial({
+      color: 0xfbbf24,
+      transparent: true,
+      opacity: 0.6,
+    });
+    const gisRing = new THREE.Mesh(gisRingGeo, gisRingMat);
+    gisRing.rotation.x = Math.PI / 2.5;
+    gisGroup.add(gisRing);
+
+    gisGroup.position.set(5.2, -3.4, 3.0);
     masterGroup.add(gisGroup);
 
-    // D. [CODE & WEB DEVELOPMENT] Floating Terminal Shard
-    const shardGeo = new THREE.PlaneGeometry(3.6, 2.2);
+    // D. [Full-Stack API & Terminal Glass Shard]
+    const shardGeo = new THREE.PlaneGeometry(3.8, 2.3);
     const shardCanvas = document.createElement('canvas');
-    shardCanvas.width = 360;
-    shardCanvas.height = 220;
+    shardCanvas.width = 380;
+    shardCanvas.height = 230;
     const shardCtx = shardCanvas.getContext('2d');
     if (shardCtx) {
-      shardCtx.fillStyle = 'rgba(10, 14, 10, 0.92)';
-      shardCtx.fillRect(0, 0, 360, 220);
-      shardCtx.strokeStyle = 'rgba(0, 255, 102, 0.4)';
+      shardCtx.fillStyle = 'rgba(10, 13, 18, 0.94)';
+      shardCtx.fillRect(0, 0, 380, 230);
+      shardCtx.strokeStyle = 'rgba(0, 255, 157, 0.4)';
       shardCtx.lineWidth = 2;
-      shardCtx.strokeRect(1, 1, 358, 218);
+      shardCtx.strokeRect(1, 1, 378, 228);
 
-      shardCtx.fillStyle = '#00ff66';
+      shardCtx.fillStyle = '#00ff9d';
+      shardCtx.font = '700 13px "JetBrains Mono", monospace';
+      shardCtx.fillText('// HIGH-SPEED API & DB CLUSTER', 20, 34);
+
+      shardCtx.fillStyle = '#94a3b8';
       shardCtx.font = '12px "JetBrains Mono", monospace';
-      shardCtx.fillText('// Web Development & APIs', 20, 32);
-
-      shardCtx.fillStyle = '#8a8a8a';
-      shardCtx.fillText('router.get("/api/v1/projects")', 20, 62);
-      shardCtx.fillText('const res = await dispatch();', 20, 92);
-      shardCtx.fillStyle = '#3b82f6';
-      shardCtx.fillText('render(DOMTree.mount());', 20, 122);
-      shardCtx.fillStyle = '#10b981';
-      shardCtx.fillText('status: 200 OK (14ms)', 20, 152);
+      shardCtx.fillText('POST /api/v1/sandbox/execute', 20, 68);
+      shardCtx.fillText('Database: PostgreSQL [Active Connection]', 20, 98);
+      shardCtx.fillStyle = '#38bdf8';
+      shardCtx.fillText('Status: 200 OK • Latency: 12ms', 20, 128);
+      shardCtx.fillStyle = '#00ff9d';
+      shardCtx.fillText('✓ ATS Algorithm: 98% Match Rate', 20, 158);
+      shardCtx.fillStyle = '#fbbf24';
+      shardCtx.fillText('⚡ Production Verified Build', 20, 188);
     }
     const shardTexture = new THREE.CanvasTexture(shardCanvas);
     const shardMat = new THREE.MeshBasicMaterial({
       map: shardTexture,
       transparent: true,
-      opacity: 0.95,
+      opacity: 0.96,
       side: THREE.DoubleSide,
     });
     const shardMesh = new THREE.Mesh(shardGeo, shardMat);
-    shardMesh.position.set(-4.6, -2.8, 2.4);
-    shardMesh.rotation.y = 0.28;
+    shardMesh.position.set(-5.0, -3.0, 2.6);
+    shardMesh.rotation.y = 0.32;
     masterGroup.add(shardMesh);
 
-    // --- 3. GLOWING DATA NETWORK CONSTELLATION LINES ---
+    // --- 4. DATA NETWORK CONSTELLATION LINES ---
     const lineMat = new THREE.LineBasicMaterial({
-      color: 0x00ff66,
+      color: 0x00ff9d,
       transparent: true,
-      opacity: 0.18,
+      opacity: 0.22,
     });
 
     const createVectorLine = (p1: THREE.Vector3, p2: THREE.Vector3) => {
@@ -263,39 +342,54 @@ export const DigitalWorkspace3D: React.FC = () => {
     const l4 = createVectorLine(origin, shardMesh.position);
     masterGroup.add(l1, l2, l3, l4);
 
-    // --- 4. AMBIENT PARTICLE DUST FIELD ---
+    // --- 5. 3D GLOWING PARTICLE MATRIX ---
     const isMobile = window.innerWidth < 768;
-    const particleCount = isMobile ? 90 : 280;
+    const particleCount = isMobile ? 120 : 360;
     const particlePositions = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      particlePositions[i] = (Math.random() - 0.5) * 30;
-      particlePositions[i + 1] = (Math.random() - 0.5) * 24;
-      particlePositions[i + 2] = (Math.random() - 0.5) * 18;
+    const particleColors = new Float32Array(particleCount * 3);
+
+    const cMint = new THREE.Color(0x00ff9d);
+    const cCyan = new THREE.Color(0x38bdf8);
+    const cViolet = new THREE.Color(0xa855f7);
+
+    for (let i = 0; i < particleCount; i++) {
+      const i3 = i * 3;
+      particlePositions[i3] = (Math.random() - 0.5) * 32;
+      particlePositions[i3 + 1] = (Math.random() - 0.5) * 26;
+      particlePositions[i3 + 2] = (Math.random() - 0.5) * 20;
+
+      const pickColor = Math.random() < 0.6 ? cMint : Math.random() < 0.85 ? cCyan : cViolet;
+      particleColors[i3] = pickColor.r;
+      particleColors[i3 + 1] = pickColor.g;
+      particleColors[i3 + 2] = pickColor.b;
     }
+
     const particleGeo = new THREE.BufferGeometry();
     particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
     const particleMat = new THREE.PointsMaterial({
-      color: 0x00ff66,
-      size: 0.09,
+      size: 0.11,
+      vertexColors: true,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.55,
     });
     const particles = new THREE.Points(particleGeo, particleMat);
     scene.add(particles);
 
-    // --- 5. LIGHTING RIG ---
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    // --- 6. LIGHTING RIG ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
     scene.add(ambientLight);
 
-    const greenKeyLight = new THREE.PointLight(0x00ff66, 1.8, 35);
-    greenKeyLight.position.set(-8, 7, 10);
-    scene.add(greenKeyLight);
+    const mintKeyLight = new THREE.PointLight(0x00ff9d, 2.2, 40);
+    mintKeyLight.position.set(-9, 8, 12);
+    scene.add(mintKeyLight);
 
-    const blueFillLight = new THREE.PointLight(0x3b82f6, 1.4, 35);
-    blueFillLight.position.set(8, -5, 10);
-    scene.add(blueFillLight);
+    const cyanFillLight = new THREE.PointLight(0x38bdf8, 1.8, 40);
+    cyanFillLight.position.set(9, -6, 12);
+    scene.add(cyanFillLight);
 
-    // --- 6. MOUSE PARALLAX & SCROLL INTERACTION ---
+    // --- 7. MOUSE PARALLAX & SCROLL INTERACTION ---
     let mouseX = 0;
     let mouseY = 0;
     let targetRotX = 0;
@@ -309,8 +403,8 @@ export const DigitalWorkspace3D: React.FC = () => {
       mouseX = (x / width - 0.5) * 2;
       mouseY = (y / height - 0.5) * 2;
 
-      targetRotY = mouseX * 0.28;
-      targetRotX = -mouseY * 0.22;
+      targetRotY = mouseX * 0.32;
+      targetRotX = -mouseY * 0.24;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -323,51 +417,56 @@ export const DigitalWorkspace3D: React.FC = () => {
 
     const handleResize = () => {
       if (!container) return;
-      width = container.clientWidth || 600;
-      height = container.clientHeight || 550;
+      width = container.clientWidth || 640;
+      height = container.clientHeight || 580;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
     };
     window.addEventListener('resize', handleResize);
 
-    // Animation Loop
+    // 8. Animation Loop
     let animationId: number;
     const clock = new THREE.Clock();
 
     const animate = () => {
       const t = clock.getElapsedTime();
 
-      // Smooth master rotation
-      masterGroup.rotation.y += (targetRotY - masterGroup.rotation.y) * 0.05;
-      masterGroup.rotation.x += (targetRotX - masterGroup.rotation.x) * 0.05;
+      // Smooth master rotation with spring lerp
+      masterGroup.rotation.y += (targetRotY - masterGroup.rotation.y) * 0.055;
+      masterGroup.rotation.x += (targetRotX - masterGroup.rotation.x) * 0.055;
 
-      // Scroll reaction
-      masterGroup.position.y = -scrollY * 0.0035;
-      masterGroup.rotation.z = Math.sin(t * 0.5) * 0.015;
+      // Subtle scroll parallax reaction
+      masterGroup.position.y = -scrollY * 0.0032;
+      masterGroup.rotation.z = Math.sin(t * 0.4) * 0.018;
 
-      // AI Node floating & orbiting
+      // AI Node floating & dual ring orbit
       aiMesh.rotation.x = t * 0.45;
       aiMesh.rotation.y = t * 0.65;
-      aiRing.rotation.z = t * 0.8;
-      aiGroup.position.y = 3.0 + Math.sin(t * 1.6) * 0.28;
+      ring1.rotation.z = t * 0.9;
+      ring2.rotation.x = -t * 0.7;
+      aiGroup.position.y = 3.2 + Math.sin(t * 1.5) * 0.3;
 
       // Cloud Node floating & rotating
-      cloudMesh.rotation.x = t * 0.35;
-      cloudMesh.rotation.y = t * 0.55;
-      cloudGroup.position.y = 2.6 + Math.cos(t * 1.4) * 0.25;
+      knotMesh.rotation.x = t * 0.38;
+      knotMesh.rotation.y = t * 0.52;
+      cloudGroup.position.y = 2.8 + Math.cos(t * 1.3) * 0.26;
 
       // GIS Node rotation
-      gisMesh.rotation.y = t * 0.5;
-      gisMesh.rotation.z = t * 0.35;
-      gisGroup.position.y = -3.2 + Math.sin(t * 1.8) * 0.22;
+      gisMesh.rotation.y = t * 0.48;
+      gisMesh.rotation.z = t * 0.32;
+      gisRing.rotation.z = t * 0.6;
+      gisGroup.position.y = -3.4 + Math.sin(t * 1.7) * 0.24;
 
       // Code Shard floating
-      shardMesh.position.y = -2.8 + Math.cos(t * 1.5) * 0.2;
+      shardMesh.position.y = -3.0 + Math.cos(t * 1.4) * 0.22;
 
-      // Particle Field slow drift
-      particles.rotation.y = t * 0.025;
-      particles.rotation.x = t * 0.018;
+      // Particle Field slow galactic drift
+      particles.rotation.y = t * 0.03;
+      particles.rotation.x = t * 0.02;
+
+      // Cyber Grid undulating opacity
+      gridMat.opacity = 0.07 + Math.sin(t * 1.2) * 0.025;
 
       renderer.render(scene, camera);
       animationId = requestAnimationFrame(animate);
@@ -389,3 +488,4 @@ export const DigitalWorkspace3D: React.FC = () => {
 
   return <div className="workspace-3d-canvas" ref={mountRef} />;
 };
+
