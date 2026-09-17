@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { PORTFOLIO_DATA } from '../../data/portfolioData';
 import { DigitalWorkspace3D } from './DigitalWorkspace3D';
 import { MagneticButton } from '../UI/MagneticButton';
@@ -18,9 +18,30 @@ import './Hero.css';
 interface HeroProps {
   onContactClick: () => void;
   onShowToast?: (message: string) => void;
+  onOpenCaseStudy?: (projectId: string) => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onContactClick, onShowToast }) => {
+export const Hero: React.FC<HeroProps> = ({ onContactClick, onShowToast, onOpenCaseStudy }) => {
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+
+  // Word-by-word reveal animation on mount
+  useEffect(() => {
+    const el = headlineRef.current;
+    if (!el) return;
+    const words = el.querySelectorAll('.headline-word');
+    words.forEach((w, i) => {
+      (w as HTMLElement).style.animationDelay = `${0.15 + i * 0.12}s`;
+    });
+  }, []);
+
+  const handleSatelliteClick = (projectId: string) => {
+    if (onOpenCaseStudy) {
+      onOpenCaseStudy(projectId);
+    } else if (onShowToast) {
+      onShowToast(`Opening ${projectId} case study...`);
+    }
+  };
+
   const scrollToProjects = (e: React.MouseEvent) => {
     e.preventDefault();
     const target = document.querySelector('#projects');
@@ -82,6 +103,10 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
       {/* Background ambient lighting */}
       <div className="hero-ambient-glow" />
       <div className="hero-ambient-glow-secondary" />
+      <div className="hero-ambient-glow-tertiary" />
+
+      {/* Animated grid backdrop */}
+      <div className="hero-grid-backdrop" />
 
       <div className="container hero-container">
         {/* Left: Headline, Badges, Metrics & CTAs */}
@@ -99,6 +124,7 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
             rel="noopener noreferrer"
             className="hero-live-product-banner"
             title="Launch live working project ResumeCraft"
+            data-interactive="true"
           >
             <div className="banner-left-wrap">
               <span className="live-pulse-beacon" />
@@ -111,10 +137,16 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
             </div>
           </a>
 
-          {/* Main Headline */}
-          <h1 className="hero-headline">
-            I build <span className="hero-headline-accent">digital products</span> <br />
-            that solve <span className="hero-headline-highlight">real problems.</span>
+          {/* Main Headline — word-by-word reveal */}
+          <h1 className="hero-headline" ref={headlineRef}>
+            <span className="headline-word">I</span>{' '}
+            <span className="headline-word">build</span>{' '}
+            <span className="headline-word hero-headline-accent">digital</span>{' '}
+            <span className="headline-word hero-headline-accent">products</span>
+            <br />
+            <span className="headline-word">that</span>{' '}
+            <span className="headline-word">solve</span>{' '}
+            <span className="headline-word hero-headline-highlight">real problems.</span>
           </h1>
 
           <p className="hero-description">
@@ -123,7 +155,7 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
 
           {/* Live Floating Metric Highlights */}
           <div className="hero-metrics-grid">
-            <div className="hero-metric-card">
+            <div className="hero-metric-card" data-tilt>
               <div className="metric-header">
                 <Zap size={15} className="text-accent" />
                 <span className="metric-num font-mono">5+</span>
@@ -131,7 +163,7 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
               <span className="metric-label">Products Built & Shipped</span>
             </div>
 
-            <div className="hero-metric-card">
+            <div className="hero-metric-card" data-tilt>
               <div className="metric-header">
                 <Award size={15} className="text-accent" />
                 <span className="metric-num font-mono">3rd</span>
@@ -139,7 +171,7 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
               <span className="metric-label">SIH Internal Hackathon</span>
             </div>
 
-            <div className="hero-metric-card">
+            <div className="hero-metric-card" data-tilt>
               <div className="metric-header">
                 <CheckCircle2 size={15} className="text-accent" />
                 <span className="metric-num font-mono">100%</span>
@@ -199,19 +231,19 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
           </div>
         </div>
 
-        {/* Right: 3D Digital Workspace Command Center */}
+        {/* Right: 3D Cosmic Core Command Center */}
         <div className="hero-visual-wrapper">
           <div className="hero-3d-frame">
-            <DigitalWorkspace3D />
+            <DigitalWorkspace3D onSatelliteClick={handleSatelliteClick} />
 
             {/* Overlay Badges for visual depth */}
             <div className="floating-ui-card floating-ui-top">
               <div className="floating-ui-header">
                 <span className="ui-dot ui-dot-green" />
-                <span>ACTIVE WORKSPACE</span>
+                <span>ACTIVE CORE</span>
               </div>
               <div className="floating-ui-body">
-                <span>Gautam's Digital Workshop</span>
+                <span>Gautam's Digital Universe</span>
                 <span className="ui-pill font-mono">60FPS WebGL</span>
               </div>
             </div>
@@ -219,16 +251,22 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
             <div className="floating-ui-card floating-ui-bottom">
               <div className="floating-ui-header">
                 <span className="ui-dot ui-dot-blue" />
-                <span>FEATURED ENGINE</span>
+                <span>ORBITING ENGINES</span>
               </div>
               <div className="floating-ui-live-row">
                 <div className="live-engine-info">
-                  <span className="live-engine-name">ResumeCraft AI & CloudLab</span>
-                  <span className="live-engine-sub font-mono">resumecraft.co.in</span>
+                  <span className="live-engine-name">5 Live Product Satellites</span>
+                  <span className="live-engine-sub font-mono">hover &amp; click to inspect</span>
                 </div>
                 <span className="live-badge-glow">ONLINE</span>
               </div>
             </div>
+
+            {/* Corner brackets for sci-fi frame */}
+            <span className="hero-corner hero-corner-tl" />
+            <span className="hero-corner hero-corner-tr" />
+            <span className="hero-corner hero-corner-bl" />
+            <span className="hero-corner hero-corner-br" />
           </div>
         </div>
       </div>

@@ -213,9 +213,98 @@
   overflow: hidden;
 }
 
+/* Cosmic ambient glow per section — alternating mint/cyan/violet */
+.scene-section::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: -10%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(0, 255, 157, 0.04) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.scene-section::after {
+  content: '';
+  position: absolute;
+  bottom: 5%;
+  left: -10%;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.035) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(85px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Keep section content above the ambient glows */
+.scene-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Animated gradient section title — matches the hero headline */
+.section-title {
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 40%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin-top: 18px;
+  background: linear-gradient(90deg, var(--accent-green), var(--accent-blue), var(--accent-purple));
+  border-radius: 2px;
+  animation: section-underline-pulse 3s ease-in-out infinite;
+}
+
+@keyframes section-underline-pulse {
+  0%, 100% { width: 64px; opacity: 0.8; }
+  50% { width: 96px; opacity: 1; }
+}
+
+/* Cosmic Divider — placed between sections for visual flow */
+.cosmic-divider {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 255, 157, 0.3) 30%,
+    rgba(56, 189, 248, 0.4) 50%,
+    rgba(168, 85, 247, 0.3) 70%,
+    transparent 100%
+  );
+  overflow: visible;
+}
+
+.cosmic-divider::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 12px var(--accent-green), 0 0 24px rgba(0, 255, 157, 0.4);
+  animation: pulse-dot 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 /* Grid Lines Subtle Background */
 .bg-grid-pattern {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 48px 48px;

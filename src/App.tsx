@@ -63,7 +63,13 @@ export function App() {
 
       <main id="main-content">
         {/* 02: Hero Section & 3D Command Center */}
-        <Hero onContactClick={handleContactClick} onShowToast={handleShowToast} />
+        <Hero
+          onContactClick={handleContactClick}
+          onShowToast={handleShowToast}
+          onOpenCaseStudy={handleOpenCaseStudy}
+        />
+
+        <div className="cosmic-divider" />
 
         {/* 03: Projects Centerpiece (ResumeCraft, CloudLab, SIH 3D ULPIN, SkillSync, HunarHub) */}
         <SelectedWork
@@ -71,8 +77,12 @@ export function App() {
           activeSkillHighlight={activeSkillHighlight}
         />
 
+        <div className="cosmic-divider" />
+
         {/* 04: How I Build (01 Idea → 02 Design → 03 Build → 04 Iterate → 05 Ship) */}
         <HowIBuild />
+
+        <div className="cosmic-divider" />
 
         {/* 09: About ("More than just code." - Story, 3D Education Timeline & Freelancing) */}
         <About onContactClick={handleContactClick} />
@@ -80,11 +90,15 @@ export function App() {
         {/* 10: Education Timeline (2023, 2025, 2026-Present Amity BCA) */}
         <EducationTimeline />
 
+        <div className="cosmic-divider" />
+
         {/* 11: Skills / Technology Constellation */}
         <TechConstellation
           onSkillHover={setActiveSkillHighlight}
           onSelectProject={handleOpenCaseStudy}
         />
+
+        <div className="cosmic-divider" />
 
         {/* 12: Experience ("From ideas to products.") */}
         <Experience
@@ -94,6 +108,8 @@ export function App() {
 
         {/* 13: Achievements ("Built. Competed. Learned.") */}
         <Achievements />
+
+        <div className="cosmic-divider" />
 
         {/* 14: Final CTA ("Have an idea? Let's build it.") */}
         <ContactCTA onShowToast={handleShowToast} />
