@@ -17,6 +17,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onContactClick }) => {
     { label: 'About', href: '#about', id: 'about' },
     { label: 'Projects', href: '#projects', id: 'projects' },
     { label: 'Experience', href: '#experience', id: 'experience' },
+    { label: 'Freelance', href: '#freelance', id: 'freelance' },
     { label: 'Education', href: '#education', id: 'education' },
     { label: 'Skills', href: '#skills', id: 'skills' },
     { label: 'Contact', href: '#contact', id: 'contact' },

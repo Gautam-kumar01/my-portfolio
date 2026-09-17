@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { PORTFOLIO_DATA } from '../../data/portfolioData';
 import { DigitalWorkspace3D } from './DigitalWorkspace3D';
 import { MagneticButton } from '../UI/MagneticButton';
+import { generateResumePDF } from '../../utils/generateResumePDF';
 import {
   ArrowDown,
   ArrowUpRight,
@@ -53,34 +54,16 @@ export const Hero: React.FC<HeroProps> = ({ onContactClick, onShowToast, onOpenC
   const handleDownloadCV = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onShowToast) {
-      onShowToast("Downloading Gautam Kumar's verified Resume...");
+      onShowToast("Generating & downloading Gautam Kumar's structured PDF Resume...");
     }
-    const cvContent = `GAUTAM KUMAR
-Full-Stack Developer • Builder • Freelancer
-Email: ${PORTFOLIO_DATA.personal.email}
-LinkedIn: ${PORTFOLIO_DATA.personal.linkedin}
-GitHub: ${PORTFOLIO_DATA.personal.github}
-Education: B.C.A @ Amity University (2026-Present) | 12th GMIC (2025) | 10th CBSE (2023)
-
-CORE PRODUCTS BUILT:
-- ResumeCraft (Live AI Resume Builder & ATS Scoring Engine - https://resumecraft.co.in)
-- CloudLab (Browser-Based Cloud Sandbox & Interactive Web Terminal)
-- SIH 2026 3D ULPIN (3D Geospatial Cadastral Elevation Mapping Engine - 3rd Rank)
-- SkillSync (Automated Skill Gap & Job Market Requirement Analyzer)
-- HunarHub (Student Project Showcase & Collaboration MVP)
-
-CORE TECHNICAL MATRIX:
-React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Docker, WebSockets, LLM Integrations
-`;
-    const blob = new Blob([cvContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Gautam_Kumar_Resume_2026.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      generateResumePDF();
+    } catch (err) {
+      console.error('Error generating PDF:', err);
+      if (onShowToast) {
+        onShowToast("Failed to generate PDF. Retrying...");
+      }
+    }
   };
 
   const techStackMarquee = [
@@ -111,10 +94,29 @@ React 19, TypeScript, Node.js, Python, PostgreSQL, MongoDB, Three.js WebGL, Dock
       <div className="container hero-container">
         {/* Left: Headline, Badges, Metrics & CTAs */}
         <div className="hero-content">
-          {/* Top Status Pill */}
-          <div className="hero-role-badge">
-            <span className="hero-role-dot" />
-            <span className="hero-role-text">FULL-STACK DEVELOPER • BUILDER • FREELANCER</span>
+          {/* Gautam Kumar Verified Developer Profile Chip */}
+          <div className="hero-developer-badge">
+            <div className="hero-avatar-wrapper">
+              <img
+                src="/gautam-profile.jpg"
+                alt="Gautam Kumar - Full-Stack Developer"
+                className="hero-avatar-img"
+              />
+              <span className="hero-avatar-status-dot" />
+            </div>
+            <div className="hero-developer-info">
+              <div className="hero-developer-name-row">
+                <span className="hero-developer-name">Gautam Kumar</span>
+                <span className="hero-verified-badge" title="Verified Full-Stack Builder">
+                  <CheckCircle2 size={13} className="text-accent" />
+                </span>
+              </div>
+              <span className="hero-developer-sub">Full-Stack Developer • Builder • Freelancer</span>
+            </div>
+            <div className="hero-available-tag">
+              <span className="live-pulse-dot" />
+              <span>Available</span>
+            </div>
           </div>
 
           {/* Featured Live Product Quick-Launcher Ribbon */}

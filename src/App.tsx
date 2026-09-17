@@ -7,6 +7,7 @@ import { About } from './components/About/About';
 import { EducationTimeline } from './components/Education/EducationTimeline';
 import { TechConstellation } from './components/Skills/TechConstellation';
 import { Experience } from './components/Experience/Experience';
+import { FreelanceSection } from './components/Freelance/FreelanceSection';
 import { Achievements } from './components/Achievements/Achievements';
 import { ContactCTA } from './components/ContactCTA/ContactCTA';
 import { Footer } from './components/Footer/Footer';
@@ -14,6 +15,7 @@ import { CaseStudyModal } from './components/SelectedWork/CaseStudyModal';
 import { CustomCursor } from './components/UI/CustomCursor';
 import { LoadingScreen } from './components/UI/LoadingScreen';
 import { Toast } from './components/UI/Toast';
+import { GlobalCosmicCanvas3D } from './components/UI/GlobalCosmicCanvas3D';
 
 export function App() {
   const [activeCaseStudyId, setActiveCaseStudyId] = useState<string | null>(null);
@@ -44,6 +46,9 @@ export function App() {
 
   return (
     <div className="portfolio-app-root bg-grid-pattern">
+      {/* Immersive Global 3D Particle & Constellation Background */}
+      <GlobalCosmicCanvas3D />
+
       {/* Accessible Skip To Content Link */}
       <a href="#main-content" className="skip-to-content">
         Skip to content
@@ -84,7 +89,7 @@ export function App() {
 
         <div className="cosmic-divider" />
 
-        {/* 09: About ("More than just code." - Story, 3D Education Timeline & Freelancing) */}
+        {/* 09: About ("More than just code." - Story & Ethos) */}
         <About onContactClick={handleContactClick} />
 
         {/* 10: Education Timeline (2023, 2025, 2026-Present Amity BCA) */}
@@ -106,12 +111,22 @@ export function App() {
           onSelectProject={handleOpenCaseStudy}
         />
 
-        {/* 13: Achievements ("Built. Competed. Learned.") */}
+        <div className="cosmic-divider" />
+
+        {/* 13: Enhanced 3D Freelance & Client Solutions Showcase */}
+        <FreelanceSection
+          onContactClick={handleContactClick}
+          onShowToast={handleShowToast}
+        />
+
+        <div className="cosmic-divider" />
+
+        {/* 14: Achievements ("Built. Competed. Learned.") */}
         <Achievements />
 
         <div className="cosmic-divider" />
 
-        {/* 14: Final CTA ("Have an idea? Let's build it.") */}
+        {/* 15: Final CTA ("Have an idea? Let's build it.") */}
         <ContactCTA onShowToast={handleShowToast} />
       </main>
 

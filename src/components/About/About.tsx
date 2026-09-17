@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ScrollReveal } from '../UI/ScrollReveal';
-import { MagneticButton } from '../UI/MagneticButton';
 import {
   User,
   GraduationCap,
-  Briefcase,
-  ArrowUpRight,
   Sparkles,
   MapPin,
   Calendar,
   CheckCircle2,
   Terminal,
   Code2,
-  Globe,
   Cpu,
   Workflow,
 } from 'lucide-react';
@@ -22,7 +18,7 @@ interface AboutProps {
   onContactClick?: () => void;
 }
 
-export const About: React.FC<AboutProps> = ({ onContactClick }) => {
+export const About: React.FC<AboutProps> = () => {
   const [activeMilestone, setActiveMilestone] = useState(2); // default to present
   const timelineRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -87,16 +83,6 @@ export const About: React.FC<AboutProps> = ({ onContactClick }) => {
       highlight: 'Building enterprise-grade apps, hackathon systems, and client solutions.',
     },
   ];
-
-  const handleWorkWithMe = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (onContactClick) {
-      onContactClick();
-    } else {
-      const contactSec = document.querySelector('#contact');
-      if (contactSec) contactSec.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <section className="scene-section about-narrative-section" id="about">
@@ -167,6 +153,26 @@ export const About: React.FC<AboutProps> = ({ onContactClick }) => {
                 <div className="terminal-title">
                   <Terminal size={12} />
                   <span>gautam_profile.json</span>
+                </div>
+              </div>
+
+              {/* Developer Profile Portrait Header */}
+              <div className="about-terminal-photo-header">
+                <div className="about-photo-wrap">
+                  <img
+                    src="/gautam-profile.jpg"
+                    alt="Gautam Kumar"
+                    className="about-profile-photo"
+                  />
+                  <span className="about-photo-status-badge">
+                    <span className="status-dot" />
+                    <span>Active</span>
+                  </span>
+                </div>
+                <div className="about-photo-details">
+                  <h4 className="about-photo-name">Gautam Kumar</h4>
+                  <p className="about-photo-role">Full-Stack Developer & Builder</p>
+                  <p className="about-photo-uni">Amity University • B.C.A</p>
                 </div>
               </div>
 
@@ -274,76 +280,6 @@ export const About: React.FC<AboutProps> = ({ onContactClick }) => {
             </div>
           </div>
         </div>
-
-        {/* 3. FREELANCING SECTION: "Building for people beyond the classroom" */}
-        <ScrollReveal delay={100}>
-          <div className="freelancing-feature-card" id="freelance">
-            <div className="freelancing-card-content">
-              <div className="eyebrow freelancing-eyebrow">
-                <Briefcase size={14} />
-                <span>FREELANCING & CLIENT SOLUTIONS</span>
-              </div>
-
-              <h3 className="freelancing-heading">
-                Building for people beyond the classroom.
-              </h3>
-
-              <p className="freelancing-desc">
-                Beyond my academic coursework and personal software builds, I work as an active <strong>freelance developer</strong>. I partner with founders, businesses, and creators to transform raw ideas into polished, high-performing websites and functional digital products.
-              </p>
-
-              <div className="freelance-deliverables-grid">
-                <div className="freelance-feat-box">
-                  <div className="feat-icon-wrap">
-                    <Globe size={20} className="text-accent" />
-                  </div>
-                  <div>
-                    <h5>Custom Web Applications</h5>
-                    <p>High-conversion, modern web apps with responsive design, dynamic routing, and smooth micro-interactions.</p>
-                  </div>
-                </div>
-
-                <div className="freelance-feat-box">
-                  <div className="feat-icon-wrap">
-                    <Terminal size={20} className="text-accent" />
-                  </div>
-                  <div>
-                    <h5>Full-Stack Architecture</h5>
-                    <p>Robust REST/GraphQL APIs, secure authentication, resilient databases, and automated cloud deployments.</p>
-                  </div>
-                </div>
-
-                <div className="freelance-feat-box">
-                  <div className="feat-icon-wrap">
-                    <Sparkles size={20} className="text-accent" />
-                  </div>
-                  <div>
-                    <h5>AI & Modern Tooling</h5>
-                    <p>OpenAI/Gemini integrations, intelligent prompt engineering, automated workflows, and fast semantic search.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="freelance-cta-row">
-                <MagneticButton strength={15}>
-                  <button
-                    onClick={handleWorkWithMe}
-                    className="btn-accent freelance-work-btn"
-                    aria-label="Work with me"
-                  >
-                    <span>Work with me</span>
-                    <ArrowUpRight size={16} />
-                  </button>
-                </MagneticButton>
-
-                <div className="freelance-guarantee-note">
-                  <span className="status-dot" />
-                  <span>Available for freelance projects, MVP launches, and technical collaborations.</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
       </div>
     </section>
   );

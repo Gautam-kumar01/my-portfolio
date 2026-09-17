@@ -142,6 +142,76 @@
   color: var(--text-secondary);
 }
 
+.about-terminal-photo-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.about-photo-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, #00ff88, #00e5ff);
+  box-shadow: 0 0 16px rgba(0, 255, 136, 0.35);
+  flex-shrink: 0;
+}
+
+.about-profile-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.about-photo-status-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  background: #05070a;
+  border: 1px solid #00ff88;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: #00ff88;
+  font-weight: 700;
+}
+
+.about-photo-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.about-photo-name {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.about-photo-role {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.about-photo-uni {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: #00e5ff;
+}
+
 .terminal-code-body {
   padding: 24px 22px;
   display: flex;
